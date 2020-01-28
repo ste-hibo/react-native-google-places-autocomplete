@@ -4,8 +4,6 @@ import {
   TextInput,
   View,
   FlatList,
-  ScrollView,
-  Image,
   Text,
   StyleSheet,
   Dimensions,
@@ -15,7 +13,7 @@ import {
   PixelRatio,
   Keyboard
 } from 'react-native';
-import Qs from 'qs';
+import qs from 'qs';
 import debounce from 'lodash.debounce';
 
 const WINDOW = Dimensions.get('window');
@@ -116,13 +114,10 @@ export default class GooglePlacesAutocomplete extends Component {
     return [...res, ...results];
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this._request = this.props.debounce
       ? debounce(this._request, this.props.debounce)
       : this._request;
-  }
-
-  componentDidMount() {
     // This will load the default value's search results after the view has
     // been rendered
     this._handleChangeText(this.state.text);
@@ -282,7 +277,7 @@ export default class GooglePlacesAutocomplete extends Component {
         }
       };
 
-      request.open('GET', 'https://maps.googleapis.com/maps/api/place/details/json?' + Qs.stringify({
+      request.open('GET', 'https://maps.googleapis.com/maps/api/place/details/json?' + qs.stringify({
         key: this.props.query.key,
         placeid: rowData.place_id,
         language: this.props.query.language,
@@ -429,13 +424,13 @@ export default class GooglePlacesAutocomplete extends Component {
       let url = '';
       if (this.props.nearbyPlacesAPI === 'GoogleReverseGeocoding') {
         // your key must be allowed to use Google Maps Geocoding API
-        url = 'https://maps.googleapis.com/maps/api/geocode/json?' + Qs.stringify({
+        url = 'https://maps.googleapis.com/maps/api/geocode/json?' + qs.stringify({
           latlng: latitude + ',' + longitude,
           key: this.props.query.key,
           ...this.props.GoogleReverseGeocodingQuery,
         });
       } else {
-        url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + Qs.stringify({
+        url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + qs.stringify({
           location: latitude + ',' + longitude,
           key: this.props.query.key,
           ...this.props.GooglePlacesSearchQuery,
@@ -496,7 +491,7 @@ export default class GooglePlacesAutocomplete extends Component {
       if (this.props.preProcess) {
         text = this.props.preProcess(text);
       }
-      request.open('GET', 'https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=' + encodeURIComponent(text) + '&' + Qs.stringify(this.props.query));
+      request.open('GET', 'https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=' + encodeURIComponent(text) + '&' + qs.stringify(this.props.query));
       if (this.props.query.origin !== null) {
          request.setRequestHeader('Referer', this.props.query.origin)
       }
@@ -582,9 +577,8 @@ export default class GooglePlacesAutocomplete extends Component {
 
   _renderRow = (rowData = {}, sectionID, rowID) => {
     return (
-      <ScrollView
+      <View
         style={{ flex: 1 }}
-        scrollEnabled={this.props.isRowScrollable}
         keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -599,7 +593,7 @@ export default class GooglePlacesAutocomplete extends Component {
             {this._renderRowData(rowData)}
           </View>
         </TouchableHighlight>
-      </ScrollView>
+      </View>
     );
   }
 
@@ -624,40 +618,6 @@ export default class GooglePlacesAutocomplete extends Component {
   }
 
   _onFocus = () => this.setState({ listViewDisplayed: true })
-
-  _renderPoweredLogo = () => {
-    if (!this._shouldShowPoweredLogo()) {
-      return null
-    }
-
-    return (
-      <View
-        style={[this.props.suppressDefaultStyles ? {} : defaultStyles.row, defaultStyles.poweredContainer, this.props.styles.poweredContainer]}
-      >
-        <Image
-          style={[this.props.suppressDefaultStyles ? {} : defaultStyles.powered, this.props.styles.powered]}
-          resizeMode='contain'
-          source={require('./images/powered_by_google_on_white.png')}
-        />
-      </View>
-    );
-  }
-
-  _shouldShowPoweredLogo = () => {
-    if (!this.props.enablePoweredByContainer || this.state.dataSource.length == 0) {
-      return false
-    }
-
-    for (let i = 0; i < this.state.dataSource.length; i++) {
-      let row = this.state.dataSource[i];
-
-      if (!row.hasOwnProperty('isCurrentLocation') && !row.hasOwnProperty('isPredefinedPlace')) {
-        return true
-      }
-    }
-
-    return false
-  }
 
   _renderLeftButton = () => {
     if (this.props.renderLeftButton) {
@@ -687,7 +647,6 @@ export default class GooglePlacesAutocomplete extends Component {
           ItemSeparatorComponent={this._renderSeparator}
           renderItem={({ item }) => this._renderRow(item)}
           ListHeaderComponent={this.props.renderHeaderComponent && this.props.renderHeaderComponent(this.state.text)}
-          ListFooterComponent={this._renderPoweredLogo}
           {...this.props}
         />
       );
@@ -695,6 +654,7 @@ export default class GooglePlacesAutocomplete extends Component {
 
     return null;
   }
+
   render() {
     let {
       onFocus,
@@ -780,7 +740,6 @@ GooglePlacesAutocomplete.propTypes = {
   renderRightButton: PropTypes.func,
   listUnderlayColor: PropTypes.string,
   debounce: PropTypes.number,
-  isRowScrollable: PropTypes.bool,
   text: PropTypes.string,
   textInputHide: PropTypes.bool,
   suppressDefaultStyles: PropTypes.bool,
@@ -791,7 +750,6 @@ GooglePlacesAutocomplete.propTypes = {
 GooglePlacesAutocomplete.defaultProps = {
   placeholder: 'Search',
   placeholderTextColor: '#A8A8A8',
-  isRowScrollable: true,
   underlineColorAndroid: 'transparent',
   returnKeyType: 'default',
   keyboardAppearance: 'default',
@@ -836,20 +794,6 @@ GooglePlacesAutocomplete.defaultProps = {
   onSubmitEditing: () => {},
   editable: true
 }
-
-// this function is still present in the library to be retrocompatible with version < 1.1.0
-const create = function create(options = {}) {
-  return React.createClass({
-    render() {
-      return (
-        <GooglePlacesAutocomplete
-          ref="GooglePlacesAutocomplete"
-          {...options}
-        />
-      );
-    },
-  });
-};
 
 module.exports = {
   GooglePlacesAutocomplete,
