@@ -794,6 +794,5 @@ GooglePlacesAutocomplete.defaultProps = {
 }
 
 module.exports = {
-  GooglePlacesAutocomplete,
-  create
+  GooglePlacesAutocomplete
 };

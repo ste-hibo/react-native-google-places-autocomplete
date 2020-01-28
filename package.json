@@ -1,6 +1,6 @@
 {
   "name": "react-native-google-places-autocomplete-light",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Customizable Google Places autocomplete component for iOS and Android React-Native apps (updated to non-deprecated lifecycles)",
   "main": "GooglePlacesAutocomplete.js",
   "scripts": {
