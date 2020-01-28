@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ste-hibo/react-native-google-places-autocomplete"
+    "url": "git+https://github.com/ste-hibo/react-native-google-places-autocomplete-light"
   },
   "keywords": [
     "autocomplete",
@@ -22,9 +22,9 @@
     "android"
   ],
   "bugs": {
-    "url": "https://github.com/ste-hibo/react-native-google-places-autocomplete/issues"
+    "url": "https://github.com/ste-hibo/react-native-google-places-autocomplete-light/issues"
   },
-  "homepage": "https://github.com/ste-hibo/react-native-google-places-autocomplete#readme",
+  "homepage": "https://github.com/ste-hibo/react-native-google-places-autocomplete-light#readme",
   "dependencies": {
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.5.10",

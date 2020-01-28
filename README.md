@@ -3,7 +3,7 @@ Customizable Google Places autocomplete component for iOS and Android React-Nati
 
 ### Preview
 
-![](https://raw.githubusercontent.com/ste-hibo/react-native-google-places-autocomplete/master/Assets/screenshot.png)
+![](https://raw.githubusercontent.com/ste-hibo/react-native-google-places-autocomplete-light/master/Assets/screenshot.png)
 
 ### Installation
 
