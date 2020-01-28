@@ -659,10 +659,8 @@ export default class GooglePlacesAutocomplete extends Component {
     let {
       onFocus,
       clearButtonMode,
-      InputComp,
       ...userProps
     } = this.props.textInputProps;
-    const TextInputComp = !!InputComp ? InputComp : TextInput;
     return (
       <View
         style={[this.props.suppressDefaultStyles ? {} : defaultStyles.container, this.props.styles.container]}
@@ -673,7 +671,7 @@ export default class GooglePlacesAutocomplete extends Component {
             style={[this.props.suppressDefaultStyles ? {} : defaultStyles.textInputContainer, this.props.styles.textInputContainer]}
           >
             {this._renderLeftButton()}
-            <TextInputComp
+            <TextInput
               ref="textInput"
               editable={this.props.editable}
               returnKeyType={this.props.returnKeyType}
